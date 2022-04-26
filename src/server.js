@@ -18,7 +18,7 @@ server.use("/blogs", blogRouter)
 
 mongoose.connect(process.env.MONGO_CONNECTION)
 
-mongoose.connections.on("connected", () => {
+mongoose.connection.on("connected", () => {
   console.log("Connected to Mongo")
 
   server.listen(port, () => {
