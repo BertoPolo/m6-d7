@@ -30,7 +30,7 @@ blogsRouter.get("/blogId", async (req, res, next) => {
 
 blogsRouter.post("/", async (req, res, next) => {
   try {
-    const newBlog = new BlogsModel(req.body)
+    const newBlog = new BlogsModel(req.body).save()
     res.status(201).send(newBlog.id)
   } catch (error) {
     next(error)
