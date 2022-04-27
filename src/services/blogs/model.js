@@ -11,7 +11,7 @@ const blogsSchema = new Schema(
     author: { name: { type: String, required: true }, avatar: { type: String, required: true } },
     content: { type: String, required: true },
     // comments: [{ _id: String, comments: [String] }],
-    comments: {},
+    comments: [{ text: String }],
   },
   { timestamps: true }
 )

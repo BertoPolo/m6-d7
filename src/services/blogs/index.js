@@ -74,10 +74,8 @@ blogsRouter.post("/", async (req, res, next) => {
 // POST /blogPosts/:id => adds a new comment for the specified blog post
 blogsRouter.post("/:blogId", async (req, res, next) => {
   try {
-    const updatedBlog = await BlogsModel.findByIdAndUpdate(req.params.blogId, { $push: { comments: req.body } })
+    const updatedBlog = await BlogsModel.findByIdAndUpdate(req.params.blogId, { $push: { comments: req.body } }, { new: true })
 
-    // const index = await BlogsModel.findById(req.params.blogId)
-    // const newComment = new BlogsModel[index](req.body).save()
     res.status(201).send(updatedBlog)
   } catch (error) {
     next(error)
