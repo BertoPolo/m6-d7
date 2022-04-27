@@ -13,7 +13,7 @@ blogsRouter.get("/", async (req, res, next) => {
   }
 })
 
-blogsRouter.get("/blogId", async (req, res, next) => {
+blogsRouter.get("/:blogId", async (req, res, next) => {
   try {
     const blog = await BlogsModel.findById(req.params.blogId)
     // here it happens the validation of req.body, if it is not ok Mongoose will throw an error (if it is ok it is NOT saved in db yet)
@@ -28,6 +28,40 @@ blogsRouter.get("/blogId", async (req, res, next) => {
   }
 })
 
+// GET /blogPosts/:id/comments => returns all the comments for the specified blog post
+blogsRouter.get("/:blogId/comments", async (req, res, next) => {
+  try {
+    const blog = await BlogsModel.findById(req.params.blogId)
+    // here it happens the validation of req.body, if it is not ok Mongoose will throw an error (if it is ok it is NOT saved in db yet)
+    const comments = blog.comments
+
+    if (blog) {
+      res.status(200).send(blog.comments)
+    } else {
+      next(createError(404, "user not found"))
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+// GET /blogPosts/:id/comments/:commentId=> returns a single comment for the specified blog post
+// blogsRouter.get("/:blogId/comments", async (req, res, next) => {
+//   try {
+//     const blog = await BlogsModel.findById(req.params.blogId)
+//     // here it happens the validation of req.body, if it is not ok Mongoose will throw an error (if it is ok it is NOT saved in db yet)
+//     const comments = blog.comments
+
+//     if (blog) {
+//       res.status(200).send(blog.comments)
+//     } else {
+//       next(createError(404, "user not found"))
+//     }
+//   } catch (error) {
+//     next(error)
+//   }
+// })
+
 blogsRouter.post("/", async (req, res, next) => {
   try {
     const newBlog = new BlogsModel(req.body).save()
@@ -36,5 +70,42 @@ blogsRouter.post("/", async (req, res, next) => {
     next(error)
   }
 })
+
+// POST /blogPosts/:id => adds a new comment for the specified blog post
+blogsRouter.post("/:blogId", async (req, res, next) => {
+  try {
+    const updatedBlog = await BlogsModel.findByIdAndUpdate(req.params.blogId, { $push: { comments: req.body } })
+
+    // const index = await BlogsModel.findById(req.params.blogId)
+    // const newComment = new BlogsModel[index](req.body).save()
+    res.status(201).send(updatedBlog)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// PUT /blogPosts /123 => edit the blogPost with the given id
+// blogsRouter.put("/:blogId", async (req, res, next) => {
+//   try {
+//     const updatedBlog = await BlogsModel.findByIdAndUpdate(req.params.blogId, { ...req.body })
+//   } catch (error) {
+//     next(error)
+//   }
+// })
+
+// PUT /blogPosts/:id/comment/:commentId => edit the comment belonging to the specified blog post
+
+//DELETE /blogPosts /123 => delete the blogPost with the given id
+blogsRouter.delete("/:blogId", async (req, res, next) => {
+  try {
+    await BlogsModel.findByIdAndDelete(req.params.blogId)
+
+    res.status(201).send("RIP")
+  } catch (error) {
+    next(error)
+  }
+})
+
+// DELETE /blogPosts/:id/comment/:commentId=> delete the comment belonging to the specified blog post
 
 export default blogsRouter

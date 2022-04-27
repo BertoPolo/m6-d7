@@ -10,6 +10,8 @@ const blogsSchema = new Schema(
     readTime: { value: { type: Number, required: true }, unit: { type: String, required: true } },
     author: { name: { type: String, required: true }, avatar: { type: String, required: true } },
     content: { type: String, required: true },
+    // comments: [{ _id: String, comments: [String] }],
+    comments: {},
   },
   { timestamps: true }
 )
