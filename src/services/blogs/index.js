@@ -92,7 +92,13 @@ blogsRouter.post("/:blogId", async (req, res, next) => {
 // })
 
 // PUT /blogPosts/:id/comment/:commentId => edit the comment belonging to the specified blog post
-
+// blogsRouter.put("/:blogId", async (req, res, next) => {
+//   try {
+//     const updatedBlog = await BlogsModel.findByIdAndUpdate(req.params.blogId, { ...req.body })
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 //DELETE /blogPosts /123 => delete the blogPost with the given id
 blogsRouter.delete("/:blogId", async (req, res, next) => {
   try {
@@ -105,5 +111,14 @@ blogsRouter.delete("/:blogId", async (req, res, next) => {
 })
 
 // DELETE /blogPosts/:id/comment/:commentId=> delete the comment belonging to the specified blog post
+blogsRouter.delete("/:blogId/comment/:commentId", async (req, res, next) => {
+  try {
+    await BlogsModel.findByIdAndDelete(req.params.blogId)
+
+    res.status(201).send("RIP")
+  } catch (error) {
+    next(error)
+  }
+})
 
 export default blogsRouter
