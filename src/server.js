@@ -16,6 +16,7 @@ server.use("/blogs", blogRouter)
 
 // ****************** ERROR HANDLERS *********************
 
+////
 mongoose.connect(process.env.MONGO_CONNECTION)
 
 mongoose.connection.on("connected", () => {

@@ -36,11 +36,12 @@ blogsRouter.get("/:blogId/comments", async (req, res, next) => {
     const comments = blog.comments
 
     if (blog) {
-      res.status(200).send(blog.comments)
+      res.status(200).send(comments)
     } else {
       next(createError(404, "user not found"))
     }
   } catch (error) {
+    console.log(error)
     next(error)
   }
 })
@@ -49,15 +50,14 @@ blogsRouter.get("/:blogId/comments", async (req, res, next) => {
 // blogsRouter.get("/:blogId/comments", async (req, res, next) => {
 //   try {
 //     const blog = await BlogsModel.findById(req.params.blogId)
-//     // here it happens the validation of req.body, if it is not ok Mongoose will throw an error (if it is ok it is NOT saved in db yet)
-//     const comments = blog.comments
-
 //     if (blog) {
-//       res.status(200).send(blog.comments)
+//
+//       res.status(200).send()
 //     } else {
 //       next(createError(404, "user not found"))
 //     }
 //   } catch (error) {
+// console.log(error)
 //     next(error)
 //   }
 // })
@@ -99,6 +99,7 @@ blogsRouter.post("/:blogId", async (req, res, next) => {
 //     next(error)
 //   }
 // })
+
 //DELETE /blogPosts /123 => delete the blogPost with the given id
 blogsRouter.delete("/:blogId", async (req, res, next) => {
   try {
@@ -113,9 +114,9 @@ blogsRouter.delete("/:blogId", async (req, res, next) => {
 // DELETE /blogPosts/:id/comment/:commentId=> delete the comment belonging to the specified blog post
 blogsRouter.delete("/:blogId/comment/:commentId", async (req, res, next) => {
   try {
-    await BlogsModel.findByIdAndDelete(req.params.blogId)
+    const findedOne = BlogsModel.findByIdAndUpdate()
 
-    res.status(201).send("RIP")
+    res.status(200).send("RIP")
   } catch (error) {
     next(error)
   }
